@@ -14,8 +14,11 @@
 (ns clj-logging-config.log4j.test-log4j
   (:use clojure.test
         clojure.tools.logging
+        [clojure.tools.logging.impl :only [log4j-factory]]
         clj-logging-config.log4j)
   (:require [clojure.java.io :as io]))
+
+
 
 ;; Copied from clojure.contrib.with-ns
 (defmacro with-ns
@@ -50,12 +53,13 @@
         (System/setOut out#)))))
 
 (defmacro dolog [& body]
-  `(do (reset-logging!)
-       (let [ns# (create-ns (symbol "test"))]
-         (with-ns ns#
-           (clojure.core/refer-clojure)
-           (use 'clojure.tools.logging 'clj-logging-config.log4j)
-           ~@body))))
+  `(binding [*logger-factory* (log4j-factory)]
+     (do (reset-logging!)
+         (let [ns# (create-ns (symbol "test.log4j"))]
+           (with-ns ns#
+             (clojure.core/refer-clojure)
+             (use 'clojure.tools.logging 'clj-logging-config.log4j)
+             ~@body)))))
 
 (defmacro expect [expected & body]
   `(is (= ~expected (capture-stdout (dolog ~@body)))))

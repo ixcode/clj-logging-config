@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>clj-logging-config</groupId>
   <artifactId>clj-logging-config</artifactId>
-  <version>1.9.10</version>
+  <version>1.9.11-SNAPSHOT</version>
 
   <name>${project.artifactId}</name>
 
@@ -42,16 +42,17 @@
   </properties>
 
   <build>
-    <!-- We only need this because the default clojure-maven-plugin
-         version as inherited from org.clojure/pom.contrib/0.0.25 is
-         1.3.7 which is not compatible with clojure-swank/1.3.2 -
-         there is an incompatibity in the args given when launching
-         swank -->
     <plugins>
+      <!-- We need this because the default clojure-maven-plugin
+           version as inherited from org.clojure/pom.contrib/0.0.25 is
+           1.3.7 which is not compatible with clojure-swank/1.3.2 -
+           there is an incompatibity in the args given when launching
+           swank
+           Also we want to change the test namespaces for each profile -->
       <plugin>
         <groupId>com.theoryinpractise</groupId>
-	<artifactId>clojure-maven-plugin</artifactId>
-	<version>1.3.8</version>
+        <artifactId>clojure-maven-plugin</artifactId>
+        <version>1.3.10</version>
       </plugin>
     </plugins>
   </build>
@@ -67,7 +68,27 @@
       <artifactId>log4j</artifactId>
       <version>1.2.16</version>
     </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+      <version>1.0.12</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.0.12</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <version>1.9.12</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+      <version>1.2</version>
+    </dependency>
   </dependencies>
-
 
 </project>
