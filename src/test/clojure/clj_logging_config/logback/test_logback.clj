@@ -61,7 +61,6 @@
 
   (testing "Default logging" 
 
-
     (expect "INFO - Here is a log message\n"            
             (set-logger!)
             (info "Here is a log message"))
@@ -72,6 +71,20 @@
 
     (expect ""            
             (set-logger!)
-            (debug "Debug messages are hidden by default"))
-))
+            (debug "Debug messages are hidden by default")))
+
+)
+
+(deftest test-logging-levels
+  (testing "Logging at the DEBUG level"
+
+    (expect "DEBUG - Debug level messages are now shown\n"
+            (set-logger! :level :debug)
+            (debug "Debug level messages are now shown")))
+)
+
+
+
+
+
 

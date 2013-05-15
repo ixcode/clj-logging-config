@@ -57,12 +57,20 @@
 (defn reset-logging! []
   (.reset (get-logger-context)))
 
-(defn set-logger! []
+(def logback-levels {:debug Level/DEBUG
+                     :info  Level/INFO})
+
+(defn set-logger [{:keys [level]
+                   :or {level :info}}]
   (let [context (get-logger-context)
         root-logger (get-root-logger)]
     (doto root-logger
-      (.setLevel Level/INFO)
+      (.setLevel (logback-levels level))
       (.setAdditive true)
       (.addAppender (create-console-appender context "_default" "%level - %message%n")))
 
     (StatusPrinter/printInCaseOfErrorsOrWarnings context)))
+
+(defn set-logger! [& args]
+  (set-logger (apply hash-map args)))
+
