@@ -57,7 +57,8 @@
 (defn reset-logging! []
   (.reset (get-logger-context)))
 
-(def logback-levels {:debug Level/DEBUG
+(def logback-levels {:trace Level/TRACE
+                     :debug Level/DEBUG
                      :info  Level/INFO})
 
 (defn set-logger [{:keys [level]

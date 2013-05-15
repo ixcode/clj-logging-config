@@ -75,12 +75,31 @@
 
 )
 
+
+
 (deftest test-logging-levels
   (testing "Logging at the DEBUG level"
 
     (expect "DEBUG - Debug level messages are now shown\n"
             (set-logger! :level :debug)
             (debug "Debug level messages are now shown")))
+
+  (testing "All levels work"    
+    (expect "TRACE - message\n"
+            (set-logger! :level :trace)
+            (trace "message"))
+    (expect "DEBUG - message\n"          
+            (set-logger! :level :trace)
+            (debug "message"))
+    (expect "INFO - message\n"           
+            (set-logger! :level :trace)
+            (info "message"))
+    (expect "WARN - message\n"           
+            (set-logger! :level :trace)
+            (warn "message"))
+    (expect "ERROR - message\n"          
+            (set-logger! :level :trace)
+            (error "message")))
 )
 
 
