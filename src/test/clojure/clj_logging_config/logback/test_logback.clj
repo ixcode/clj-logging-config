@@ -45,63 +45,59 @@
        (finally
          (System/setOut out#)))))
 
-(defmacro dolog [& body]
-  `(do (reset-logging!)
-       (let [ns# (create-ns (symbol "test.logback"))]
-         (with-ns ns#
-           (clojure.core/refer-clojure)
-           (use 'clojure.tools.logging 'clj-logging-config.logback)
-           ~@body))))
 
 (defmacro expect [expected & body]
-  `(is (= ~expected (capture-stdout (dolog ~@body)))))
+  `(is (= ~expected (capture-stdout (do ~@body)))))
 
 
 (deftest test-default-logging
 
   (testing "Default logging" 
+    (reset-logging!)
+    (set-logger!)
+
+    (expect ""            
+            (trace "Debug messages are hidden by default"))
+
+    (expect ""            
+            (debug "Debug messages are hidden by default"))
 
     (expect "INFO - Here is a log message\n"            
-            (set-logger!)
             (info "Here is a log message"))
 
     (expect "WARN - Here is a warning\n"              
-            (set-logger!)
             (warn "Here is a warning"))
 
-    (expect ""            
-            (set-logger!)
-            (debug "Debug messages are hidden by default")))
+    (expect "ERROR - Here is an error\n"              
+            (error "Here is an error"))
 
-)
+))
 
-(defmacro expected-message [level levels-with-output message]    
-  `(if (some #{~level} ~levels-with-output)
-    (format "%s - %s\n" (clojure.string/upper-case (name ~level)) ~message)
+(defn expected-message [level levels-with-output message]    
+  (if (some #{level} levels-with-output)
+    (format "%s - %s\n" (clojure.string/upper-case (name level)) message)
     ""))
 
-(defmacro expect-levels [level-to-set levels-with-output]
+(defn expect-levels [level-to-set levels-with-output]
  
   (let [message "message"]
-    `(expect (expected-message :trace ~levels-with-output ~message)
-             (set-logger! :level ~level-to-set)
-             (trace ~message))
-    `(expect (expected-message :debug ~levels-with-output ~message)
-             (set-logger! :level ~level-to-set)
-             (debug ~message))
-    `(expect (expected-message :info ~levels-with-output ~message)
-             (set-logger! :level ~level-to-set)
-             (info ~message))
-    `(expect (expected-message :warn ~levels-with-output ~message)
-             (set-logger! :level ~level-to-set)
-             (warn ~message))
-    `(expect (expected-message :error ~levels-with-output ~message)
-             (set-logger! :level ~level-to-set)
-             (error ~message))))
+    (reset-logging!)
+    (set-logger! :level level-to-set)
+    (expect (expected-message :trace levels-with-output message)             
+             (trace message))
+    (expect (expected-message :debug levels-with-output message)
+             (debug message))
+    (expect (expected-message :info levels-with-output message)
+             (info message))
+    (expect (expected-message :warn levels-with-output message)
+             (warn message))
+    (expect (expected-message :error levels-with-output message)
+             (error message))
+))
 
 (deftest test-logging-levels
   
-  (testing "All levels work"    
+  (testing "Logging only happens at or above the current level"    
     (expect-levels :trace [:trace :debug :info :warn :error])
     (expect-levels :debug [:debug :info :warn :error])
     (expect-levels :info  [:info :warn :error])
@@ -110,7 +106,15 @@
 )
 
 
-
+;; (deftest test-ns-specific-logger
+;;   (testing "Can set the logger for a namespace by name"
+;;     (set-logger! "test.logback")
+;;     (expect ""
+;;             (info "This should not be output"))
+;;     (within-ns "test.logback"
+;;                (expect "INFO - This should be output")
+;;                ))
+;; )
 
 
 
