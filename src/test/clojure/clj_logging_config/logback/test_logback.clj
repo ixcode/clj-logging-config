@@ -80,24 +80,24 @@
     (format "%s - %s\n" (clojure.string/upper-case (name ~level)) ~message)
     ""))
 
-(defmacro expect-levels [level-to-set levels-with-output message]
+(defmacro expect-levels [level-to-set levels-with-output]
  
+  (let [message "message"]
     `(expect (expected-message :trace ~levels-with-output ~message)
-            (set-logger! :level ~level-to-set)
-            (trace ~message))
+             (set-logger! :level ~level-to-set)
+             (trace ~message))
     `(expect (expected-message :debug ~levels-with-output ~message)
-            (set-logger! :level ~level-to-set)
-            (debug ~message))
+             (set-logger! :level ~level-to-set)
+             (debug ~message))
     `(expect (expected-message :info ~levels-with-output ~message)
-            (set-logger! :level ~level-to-set)
-            (info ~message))
+             (set-logger! :level ~level-to-set)
+             (info ~message))
     `(expect (expected-message :warn ~levels-with-output ~message)
-            (set-logger! :level ~level-to-set)
-            (warn ~message))
+             (set-logger! :level ~level-to-set)
+             (warn ~message))
     `(expect (expected-message :error ~levels-with-output ~message)
-            (set-logger! :level ~level-to-set)
-            (error ~message))
-)
+             (set-logger! :level ~level-to-set)
+             (error ~message))))
 
 (deftest test-logging-levels
   (testing "Logging at the DEBUG level"
@@ -107,23 +107,11 @@
             (debug "Debug level messages are now shown")))
 
   (testing "All levels work"    
-    (expect "TRACE - message\n"
-            (set-logger! :level :trace)
-            (trace "message"))
-    (expect "DEBUG - message\n"          
-            (set-logger! :level :trace)
-            (debug "message"))
-    (expect "INFO - message\n"           
-            (set-logger! :level :trace)
-            (info "message"))
-    (expect "WARN - message\n"           
-            (set-logger! :level :trace)
-            (warn "message"))
-    (expect "ERROR - message\n"          
-            (set-logger! :level :trace)
-            (error "message"))
-
-    (expect-levels :trace [:trace :debug :info :warn :error] "message"))
+    (expect-levels :trace [:trace :debug :info :warn :error])
+    (expect-levels :debug [:debug :info :warn :error])
+    (expect-levels :info  [:info :warn :error])
+    (expect-levels :warn  [:warn :error])
+    (expect-levels :error [:error]))
 )
 
 
