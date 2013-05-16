@@ -59,7 +59,9 @@
 
 (def logback-levels {:trace Level/TRACE
                      :debug Level/DEBUG
-                     :info  Level/INFO})
+                     :info  Level/INFO
+                     :warn  Level/WARN
+                     :error Level/ERROR})
 
 (defn set-logger [{:keys [level]
                    :or {level :info}}]
