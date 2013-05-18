@@ -83,17 +83,34 @@
   (let [message "message"]
     (reset-logging!)
     (set-logger! :level level-to-set)
+    (map (fn [level-to-set] 
+           (expect (expected-message level-to-set levels-with-output))) 
+         [:trace :debug :info :warn :error])
+
     (expect (expected-message :trace levels-with-output message)             
-             (trace message))
+            (trace message))
     (expect (expected-message :debug levels-with-output message)
-             (debug message))
+            (debug message))
     (expect (expected-message :info levels-with-output message)
-             (info message))
+            (info message))
     (expect (expected-message :warn levels-with-output message)
-             (warn message))
+            (warn message))
     (expect (expected-message :error levels-with-output message)
-             (error message))
-))
+            (error message))
+    ))
+
+;; (map (fn [[level logging-fn]] 
+;;       (format "level=%s, logging-fn=%s" (name level) (str logging-fn)) ) 
+;;      {:info info :debug debug})
+
+(defn functA [x & args] 
+  (format "First: %s, rest: %s" (str x) (apply str args)))
+
+(defmacro execute-keyword-fn [keyword & args]
+  `(~(symbol (name keyword)) ~@args)) 
+
+(defmacro argy [first & args]
+  `(str "First: " ~first ", rest: " (apply str [~@args])))
 
 (deftest test-logging-levels
   
