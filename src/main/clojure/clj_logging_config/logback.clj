@@ -22,8 +22,9 @@
 
            (ch.qos.logback.core ConsoleAppender)
            (ch.qos.logback.core.encoder Encoder)
-           (ch.qos.logback.core.rolling 
-            RollingFileAppender SizeAndTimeBasedFNATP TimeBasedRollingPolicy)
+           (ch.qos.logback.core.rolling RollingFileAppender 
+                                        SizeAndTimeBasedFNATP 
+                                        TimeBasedRollingPolicy)
            (ch.qos.logback.core.util StatusPrinter)
 
            (net.logstash.logback.encoder LogstashEncoder)
@@ -76,4 +77,3 @@
 
 (defn set-logger! [& args]
   (set-logger (apply hash-map args)))
-
