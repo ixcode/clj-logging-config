@@ -16,37 +16,26 @@
 
 
 (deftest test-default-logging
-
   (testing "Default logging" 
     (reset-logging!)
     (set-logger!)
 
-    (expect ""            
-            (trace "Debug messages are hidden by default"))
+    (expect "" (trace "Trace messages are hidden by default"))
+    (expect "" (debug "Debug messages are hidden by default"))
 
-    (expect ""            
-            (debug "Debug messages are hidden by default"))
-
-    (expect "INFO - Here is a log message\n"            
-            (info "Here is a log message"))
-
-    (expect "WARN - Here is a warning\n"              
-            (warn "Here is a warning"))
-
-    (expect "ERROR - Here is an error\n"              
-            (error "Here is an error"))
-
-))
+    (expect "INFO - Here is a log message\n" (info  "Here is a log message"))
+    (expect "WARN - Here is a warning\n"     (warn  "Here is a warning"))
+    (expect "ERROR - Here is an error\n"     (error "Here is an error")))
+)
 
 
-(deftest test-logging-levels
-  
+(deftest test-logging-levels  
   (testing "Logging only happens at or above the current level"    
-    (expect-levels :trace [:trace :debug :info :warn :error])
-    (expect-levels :debug [:debug :info :warn :error])
-    (expect-levels :info  [:info :warn :error])
-    (expect-levels :warn  [:warn :error])
-    (expect-levels :error [:error]))
+    (test-level :trace [:trace :debug :info :warn :error])
+    (test-level :debug [:debug :info :warn :error])
+    (test-level :info  [:info :warn :error])
+    (test-level :warn  [:warn :error])
+    (test-level :error [:error]))
 )
 
 

@@ -60,7 +60,7 @@
   (confirm-level-output :error expected-levels message))
 
 
-(defn expect-levels 
+(defn test-level
   "For each `level-to-set', set it and then see if the corresponding `levels-with-output' show correctly " 
   [level-to-set levels-with-output]
   (let [message "message"]
