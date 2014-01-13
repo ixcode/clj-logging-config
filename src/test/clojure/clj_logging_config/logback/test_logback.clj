@@ -25,8 +25,7 @@
 
     (expect "INFO - Here is a log message\n" (info  "Here is a log message"))
     (expect "WARN - Here is a warning\n"     (warn  "Here is a warning"))
-    (expect "ERROR - Here is an error\n"     (error "Here is an error")))
-)
+    (expect "ERROR - Here is an error\n"     (error "Here is an error"))))
 
 
 (deftest test-logging-levels  
@@ -35,19 +34,17 @@
     (test-level :debug [:debug :info :warn :error])
     (test-level :info  [:info :warn :error])
     (test-level :warn  [:warn :error])
-    (test-level :error [:error]))
-)
-
+    (test-level :error [:error])))
 
 ;; (deftest test-ns-specific-logger
 ;;   (testing "Can set the logger for a namespace by name"
+;;     (reset-logging!)
 ;;     (set-logger! "test.logback")
-;;     (expect ""
-;;             (info "This should not be output"))
+
+;;     (expect "" (info "This should not be output"))
+
 ;;     (within-ns "test.logback"
-;;                (expect "INFO - This should be output")
-;;                ))
-;; )
+;;                (expect "INFO - This should be output" (info "This should be output")))))
 
 
 

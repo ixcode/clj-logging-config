@@ -64,6 +64,12 @@
                      :warn  Level/WARN
                      :error Level/ERROR})
 
+(defn report-config []
+  )
+
+(defn print-status []
+  (StatusPrinter/printInCaseOfErrorsOrWarnings (get-logger-context)))
+
 (defn set-logger [{:keys [level]
                    :or {level :info}}]
   (let [context (get-logger-context)
@@ -71,9 +77,8 @@
     (doto root-logger
       (.setLevel (logback-levels level))
       (.setAdditive true)
-      (.addAppender (create-console-appender context "_default" "%level - %message%n")))
-
-    (StatusPrinter/printInCaseOfErrorsOrWarnings context)))
+      (.addAppender (create-console-appender context "_default" "[%date{yyyy-mm-dd'T'hh:MM:ss.SSSZZ (z)]} %-6level %-35logger{35} - %message%n")))
+    ))
 
 (defn set-logger! [& args]
   (set-logger (apply hash-map args)))
