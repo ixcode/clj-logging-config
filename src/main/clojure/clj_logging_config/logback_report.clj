@@ -33,19 +33,30 @@
        (recur itr (cons (. itr next) result))
        result)))
 
+(defn encoder-as-map [^Encoder encoder]
+  (let [allProperies (bean encoder)
+        coreProperties (exclude-keys allProperies :context :statusManager)]
+    coreProperties))
+
 (defn appender-as-map [^Appender appender]
   (let [allProperties (bean appender)
         coreProperties (exclude-keys allProperties 
-                                     :context :copyOfAttachedFiltersList :statusManager :outputStream)]
-    coreProperties))
+                                     :context :copyOfAttachedFiltersList :statusManager 
+                                     :encoder :outputStream)]
+    (assoc coreProperties
+      :encoder (encoder-as-map (:encoder allProperties)))))
 
 (defn logger-as-map [^Logger logger]
   (let [allProperties (bean logger)
         coreProperties (exclude-keys allProperties 
-                                     :loggerContext :traceEnabled :warnEnabled :infoEnabled :debugEnabled :errorEnabled)
+                                     :loggerContext 
+                                     :traceEnabled :warnEnabled :infoEnabled :debugEnabled :errorEnabled
+                                     :level :effectiveLevel)
         appenderItr (. logger iteratorForAppenders)]    
     (assoc coreProperties
-      :appenders (transform-seq appender-as-map (seq-from-iterator appenderItr)))))
+      :appenders (transform-seq appender-as-map (seq-from-iterator appenderItr))
+      :level (str (:level allProperties))
+      :effectiveLevel (str (:effectiveLevel allProperties)))))
 
 
 (defn logback-configuration-as-map [^LoggerContext loggerContext]  
