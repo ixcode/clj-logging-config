@@ -1,4 +1,4 @@
-;; clj-logging-config - Logging configuration for Clojure.
+ ;; clj-logging-config - Logging configuration for Clojure.
 
 ;; by Malcolm Sparks
 
