@@ -34,7 +34,10 @@
        result)))
 
 (defn appender-as-map [^Appender appender]
-  appender)
+  (let [allProperties (bean appender)
+        coreProperties (exclude-keys allProperties 
+                                     :context :copyOfAttachedFiltersList :statusManager :outputStream)]
+    coreProperties))
 
 (defn logger-as-map [^Logger logger]
   (let [allProperties (bean logger)
@@ -48,7 +51,7 @@
 (defn logback-configuration-as-map [^LoggerContext loggerContext]  
   (let [allProperties (bean loggerContext)
         coreProperties (exclude-keys allProperties
-                                    :configurationLock :turboFilterList
+                                    :configurationLock :loggerList :turboFilterList
                                     :loggerContextRemoteView :statusManager :frameworkPackages 
                                     :executorService :copyOfListenerList :copyOfPropertyMap)]
     (assoc coreProperties
