@@ -4,7 +4,7 @@
   (:import (ch.qos.logback.classic Level Logger LoggerContext)
            (ch.qos.logback.classic.encoder PatternLayoutEncoder)
 
-           (ch.qos.logback.core Appender ConsoleAppender)
+           (ch.qos.logback.core Appender ConsoleAppender Layout)
            (ch.qos.logback.core.encoder Encoder)
            (ch.qos.logback.core.rolling RollingFileAppender 
                                         SizeAndTimeBasedFNATP 
@@ -33,10 +33,16 @@
        (recur itr (cons (. itr next) result))
        result)))
 
+(defn layout-as-map [^Layout layout]
+  (let [allProperies (bean layout)
+        coreProperties (exclude-keys allProperies :effectiveConverterMap :defaultConverterMap :context :statusManager :instanceConverterMap)]
+    coreProperties))
+
 (defn encoder-as-map [^Encoder encoder]
   (let [allProperies (bean encoder)
-        coreProperties (exclude-keys allProperies :context :statusManager)]
-    coreProperties))
+        coreProperties (exclude-keys allProperies :context :statusManager :layout)]
+    (assoc coreProperties
+      :layout (layout-as-map (:layout allProperies)))))
 
 (defn appender-as-map [^Appender appender]
   (let [allProperties (bean appender)
