@@ -65,6 +65,6 @@
   [level-to-set levels-with-output]
   (let [message "message"]
     (reset-logging!)
-    (set-logger! :level level-to-set)
+    (set-logger! :level level-to-set :pattern "%level - %message%n")
     (check-output-levels levels-with-output message)))
 

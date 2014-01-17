@@ -20,6 +20,12 @@
     (set-logger!)
     (info "Hello World")))
 
+(deftest test-set-logger-with-pattern
+  (testing "can set a pattern on the logger"
+    (reset-logging!)
+    (set-logger! :pattern "%level --foo-- %message%n")
+    (expect "INFO --foo-- hello johnny\n" (info "hello johnny"))))
+
 (deftest test-default-logging
   (testing "Default logging" 
     (reset-logging!)

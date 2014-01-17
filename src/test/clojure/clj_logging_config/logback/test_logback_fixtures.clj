@@ -27,6 +27,7 @@
     (set-logger!)
     (is (= "INFO - Hello World\n" (expected-message :info [:info] "Hello World")))))
 
+
 (deftest test-check-output-levels
   (testing "checks output at each level"
     (reset-logging!)
