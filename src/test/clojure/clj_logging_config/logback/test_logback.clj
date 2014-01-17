@@ -14,18 +14,25 @@
         clj-logging-config.logback.logback-fixtures)
   (:require [clojure.java.io :as io]))
 
+(deftest simplest-test
+  (testing "Just the basics"
+    (reset-logging!)
+    (set-logger!)
+    (info "Hello World")))
 
 (deftest test-default-logging
   (testing "Default logging" 
     (reset-logging!)
     (set-logger!)
 
+
     (expect "" (trace "Trace messages are hidden by default"))
     (expect "" (debug "Debug messages are hidden by default"))
 
     (expect "INFO - Here is a log message\n" (info  "Here is a log message"))
     (expect "WARN - Here is a warning\n"     (warn  "Here is a warning"))
-    (expect "ERROR - Here is an error\n"     (error "Here is an error"))))
+    (expect "ERROR - Here is an error\n"     (error "Here is an error")))
+)
 
 
 (deftest test-logging-levels  

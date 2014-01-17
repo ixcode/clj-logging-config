@@ -12,7 +12,8 @@
 ;; software.
 
 (ns clj-logging-config.logback
-  (:use clojure.tools.logging)
+  (:use clojure.tools.logging
+        clj-logging-config.logback-report)
 
   (:require [clojure.java.io :as io]
             [clojure.tools.logging.impl])
@@ -65,7 +66,7 @@
                      :error Level/ERROR})
 
 (defn report-config []
-  )
+  (report/println-logback-configuration))
 
 (defn print-status []
   (StatusPrinter/printInCaseOfErrorsOrWarnings (get-logger-context)))
@@ -77,7 +78,7 @@
     (doto root-logger
       (.setLevel (logback-levels level))
       (.setAdditive true)
-      (.addAppender (create-console-appender context "_default" "[%date{yyyy-mm-dd'T'hh:MM:ss.SSSZZ (z)]} %-6level %-35logger{35} - %message%n")))
+      (.addAppender (create-console-appender context "_default" "[%date{yyyy-MM-dd'T'hh:mm:ss.SSSZZ (z)]} %-6level %-35logger{35} - %message%n")))
     ))
 
 (defn set-logger! [& args]
