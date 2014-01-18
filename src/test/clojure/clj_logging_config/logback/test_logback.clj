@@ -18,7 +18,21 @@
   (testing "Just the basics"
     (reset-logging!)
     (set-logger!)
-    (info "Hello World")))
+    (expect-re-find #"Hello World$" (info "Hello World"))))
+
+(deftest test-default-logging
+  (testing "Default logging" 
+    (reset-logging!)
+    (set-logger!)
+
+    (expect-empty (trace "Trace messages are hidden by default"))
+    (expect-empty (debug "Debug messages are hidden by default"))
+
+    (expect-re-find #"Here is a log message$" (info  "Here is a log message"))
+    (expect-re-find #"Here is a warning$"     (warn  "Here is a warning"))
+    (expect-re-find #"Here is an error\n"     (error "Here is an error")))
+)
+
 
 (deftest test-set-logger-with-pattern
   (testing "can set a pattern on the logger"
@@ -26,19 +40,6 @@
     (set-logger! :pattern "%level --foo-- %message%n")
     (expect "INFO --foo-- hello johnny\n" (info "hello johnny"))))
 
-(deftest test-default-logging
-  (testing "Default logging" 
-    (reset-logging!)
-    (set-logger!)
-
-
-    (expect "" (trace "Trace messages are hidden by default"))
-    (expect "" (debug "Debug messages are hidden by default"))
-
-    (expect "INFO - Here is a log message\n" (info  "Here is a log message"))
-    (expect "WARN - Here is a warning\n"     (warn  "Here is a warning"))
-    (expect "ERROR - Here is an error\n"     (error "Here is an error")))
-)
 
 
 (deftest test-logging-levels  

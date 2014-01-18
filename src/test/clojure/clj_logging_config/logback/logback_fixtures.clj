@@ -39,6 +39,12 @@
 (defmacro expect [expected & body]
   `(is (= ~expected (capture-stdout ~@body))))
 
+(defmacro expect-re-find [expected & body]
+  `(is (re-find ~expected (capture-stdout ~@body))))
+
+(defmacro expect-empty [& body]
+  `(is (empty? (capture-stdout ~@body))))
+
 
 (defmacro execute-keyword-fn [keyword & args]
   `(~(symbol (name keyword)) ~@args)) 
