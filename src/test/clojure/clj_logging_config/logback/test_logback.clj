@@ -34,14 +34,6 @@
 )
 
 
-(deftest test-set-logger-with-pattern
-  (testing "can set a pattern on the logger"
-    (reset-logging!)
-    (set-logger! :pattern "%level --foo-- %message%n")
-    (expect "INFO --foo-- hello johnny\n" (info "hello johnny"))))
-
-
-
 (deftest test-logging-levels  
   (testing "Logging only happens at or above the current level"    
     (test-level :trace [:trace :debug :info :warn :error])
@@ -49,6 +41,20 @@
     (test-level :info  [:info :warn :error])
     (test-level :warn  [:warn :error])
     (test-level :error [:error])))
+
+
+(deftest test-set-logger-with-pattern
+  (testing "can set a pattern on the logger"
+    (reset-logging!)
+    (set-logger! :pattern "%level --foo-- %message%n")
+    (expect "INFO --foo-- hello johnny\n" (info "hello johnny"))))
+
+(deftest test-set-logger-with-appender
+  (testing "can set a pattern on the logger"
+    (reset-logging!)
+    (set-logger! :pattern "%level --foo-- %message%n" :appender )
+    (expect "INFO --foo-- hello johnny\n" (info "hello johnny"))))
+
 
 ;; (deftest test-ns-specific-logger
 ;;   (testing "Can set the logger for a namespace by name"

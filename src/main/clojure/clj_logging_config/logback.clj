@@ -68,8 +68,11 @@
 (defn report-config []
   (report/println-logback-configuration))
 
-(defn print-status []
+(defn print-status-if-errors-or-warnings []
   (StatusPrinter/printInCaseOfErrorsOrWarnings (get-logger-context)))
+
+(defn add-appender []
+  (.addAppender (create-console-appender context "console" pattern)))
 
 (defn set-logger [{:keys [level pattern]
                    :or {level :info
@@ -78,8 +81,8 @@
         root-logger (get-root-logger)]
     (doto root-logger
       (.setLevel (logback-levels level))
-      (.setAdditive true)
-      (.addAppender (create-console-appender context "console" pattern)))
+      (.setAdditive true))
+    (add-appender root-logger "console" (create-pattern-encoder pattern))
     ))
 
 (defn set-logger! [& args]

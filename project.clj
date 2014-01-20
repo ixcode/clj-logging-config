@@ -10,6 +10,7 @@
                  [ch.qos.logback/logback-core "1.0.12"]
                  [ch.qos.logback/logback-classic "1.0.12"]
                  [net.logstash.logback/logstash-logback-encoder "1.2"]
-                 [org.codehaus.jackson/jackson-mapper-asl "1.9.12"]                
+                 [org.codehaus.jackson/jackson-mapper-asl "1.9.12"]
+                 [midje "1.6.0"]
                  ]
 )
