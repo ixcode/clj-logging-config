@@ -52,7 +52,7 @@
 (deftest test-set-logger-with-appender
   (testing "can set a pattern on the logger"
     (reset-logging!)
-    (set-logger! :pattern "%level --foo-- %message%n" :appender )
+    (set-logger! :pattern "%level --foo-- %message%n")
     (expect "INFO --foo-- hello johnny\n" (info "hello johnny"))))
 
 

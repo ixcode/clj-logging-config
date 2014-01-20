@@ -12,11 +12,11 @@
 ;; software.
 
 (ns clj-logging-config.logback
-  (:use clojure.tools.logging
-        clj-logging-config.logback-report)
+  (:use clojure.tools.logging)
 
   (:require [clojure.java.io :as io]
-            [clojure.tools.logging.impl])
+            [clojure.tools.logging.impl]
+            [clj-logging-config.logback-report :as report])
 
   (:import (ch.qos.logback.classic Level Logger LoggerContext)
            (ch.qos.logback.classic.encoder PatternLayoutEncoder)
@@ -71,9 +71,6 @@
 (defn print-status-if-errors-or-warnings []
   (StatusPrinter/printInCaseOfErrorsOrWarnings (get-logger-context)))
 
-(defn add-appender []
-  (.addAppender (create-console-appender context "console" pattern)))
-
 (defn set-logger [{:keys [level pattern]
                    :or {level :info
                         pattern "[%date{yyyy-MM-dd'T'hh:mm:ss.SSSZZ (z)]} %-6level %-35logger{35} - %message%n"}}]
@@ -81,8 +78,8 @@
         root-logger (get-root-logger)]
     (doto root-logger
       (.setLevel (logback-levels level))
-      (.setAdditive true))
-    (add-appender root-logger "console" (create-pattern-encoder pattern))
+      (.setAdditive true)
+      (.addAppender (create-console-appender context "console" pattern)))
     ))
 
 (defn set-logger! [& args]

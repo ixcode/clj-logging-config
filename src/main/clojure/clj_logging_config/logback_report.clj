@@ -1,6 +1,6 @@
 (ns clj-logging-config.logback-report
   "Contains functions to report on how logback is currently configured"
-  (:use clj-logging-config.logback-api)
+  (:use clj-logging-config.logback-api clojure.pprint)
   (:import (ch.qos.logback.classic Level Logger LoggerContext)
            (ch.qos.logback.classic.encoder PatternLayoutEncoder)
 
